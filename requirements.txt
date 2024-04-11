@@ -1,0 +1,7 @@
+numpy==1.19.5
+pandas==1.5.3
+scikit-maad==1.3.12
+bambird==0.3.0
+
+
+
