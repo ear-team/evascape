@@ -1,0 +1,10 @@
+;song_filename;song_fullfilename;bird_filename;categories;min_t;max_t;song_len;distance
+0;MNHN-SO-2020-232_extr2_ext_0s_05_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_05_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;4.5;7.24;2.7413333333333334;59.0
+1;MNHN-SO-2020-232_extr2_ext_0s_03_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_03_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;16.86;19.92;3.061333333333337;59.0
+2;MNHN-SO-2020-232_extr2_ext_0s_00_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_00_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;24.23;28.24;4.010666666666667;59.0
+3;MNHN-SO-2020-232_extr2_ext_0s_02_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_02_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;34.16;38.12;3.9573333333333327;59.0
+4;MNHN-SO-2020-232_extr2_ext_0s_07_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_07_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;48.3;49.28;0.9813333333333332;59.0
+5;MNHN-SO-2020-232_extr2_ext_0s_01_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_01_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;54.44;55.07;0.6293333333333333;59.0
+6;MNHN-SO-2020-232_extr2_ext_0s_04_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_04_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;59.38;63.18;3.7973333333333343;59.0
+7;MNHN-SO-2020-232_extr2_ext_0s_06_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_06_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;68.34;70.55;2.208000000000002;59.0
+8;S4A03536_20190720_040000.wav;../Evascape_soundfiles/background_channel/ambient_sound/S4A03536_20190720_040000_norm.wav;;;;;;

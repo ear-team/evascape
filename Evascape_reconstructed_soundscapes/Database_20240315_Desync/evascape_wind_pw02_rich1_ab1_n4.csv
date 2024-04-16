@@ -1,0 +1,10 @@
+;song_filename;song_fullfilename;bird_filename;categories;min_t;max_t;song_len;distance
+0;MNHN-SO-2020-232_extr2_ext_0s_01_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_01_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;6.78;7.41;0.6293333333333333;56.0
+1;MNHN-SO-2020-232_extr2_ext_0s_06_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_06_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;18.98;21.19;2.208000000000002;56.0
+2;MNHN-SO-2020-232_extr2_ext_0s_00_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_00_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;22.56;26.57;4.010666666666667;56.0
+3;MNHN-SO-2020-232_extr2_ext_0s_07_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_07_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;30.52;31.5;0.9813333333333332;56.0
+4;MNHN-SO-2020-232_extr2_ext_0s_05_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_05_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;39.86;42.6;2.7413333333333334;56.0
+5;MNHN-SO-2020-232_extr2_ext_0s_04_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_04_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;49.5;53.3;3.7973333333333343;56.0
+6;MNHN-SO-2020-232_extr2_ext_0s_02_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_02_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;58.24;62.2;3.9573333333333327;56.0
+7;MNHN-SO-2020-232_extr2_ext_0s_03_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_03_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;67.55;70.61;3.061333333333337;56.0
+8;S4A03536_20190715_031500.wav;../Evascape_soundfiles/background_channel/wind_pw02/S4A03536_20190715_031500_norm.wav;;;;;;
