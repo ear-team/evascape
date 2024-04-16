@@ -154,20 +154,20 @@ def rms_normalize(song_array):
 
 #apply reverberation
 
-ir_path = Path(r"C:\Users\ecoac-field\OneDrive\Documents\Articles-Recherches\Reconstructor\Reverb\trollers-gill\mono\dales_site1_1way_mono.wav")
-alt_ir = waveread(ir_path)
+# ir_path = Path(r"C:\Users\ecoac-field\OneDrive\Documents\Articles-Recherches\Reconstructor\Reverb\trollers-gill\mono\dales_site1_1way_mono.wav")
+# alt_ir = waveread(ir_path)
 
-path = Path(r"C:\Users\ecoac-field\OneDrive\Documents\Articles-Recherches\Reconstructor\Reverb\simulation_goestchel\Risoux200Hz\Time.npy")
-goestchel_ir = np.load(path)
+# path = Path(r"C:\Users\ecoac-field\OneDrive\Documents\Articles-Recherches\Reconstructor\Reverb\simulation_goestchel\Risoux200Hz\Time.npy")
+# goestchel_ir = np.load(path)
 
-ir_path = "C:/Users/ecoac-field/OneDrive/Documents/Articles-Recherches/Reconstructor/Reverb/koli-national-park-summer/mono/koli_summer_site2_4way_mono.wav"
-koli_ir = waveread(ir_path)
+# ir_path = "C:/Users/ecoac-field/OneDrive/Documents/Articles-Recherches/Reconstructor/Reverb/koli-national-park-summer/mono/koli_summer_site2_4way_mono.wav"
+# koli_ir = waveread(ir_path)
 
 
-def reverb(signal, impulse_response = koli_ir, normalize_ir = False, samprate = 44100):
-    if normalize_ir == True :
-        impulse_response = one_normalize(impulse_response)   
-    return np.convolve(signal, impulse_response)
+# def reverb(signal, impulse_response = koli_ir, normalize_ir = False, samprate = 44100):
+#     if normalize_ir == True :
+#         impulse_response = one_normalize(impulse_response)   
+#     return np.convolve(signal, impulse_response)
 
 def show_spectrogram(sound, min_freq = 0, max_freq = 20000, vmin = None, vmax = None, samprate = 44100):
     N = 4096

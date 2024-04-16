@@ -252,7 +252,7 @@ normch2_df.to_csv(sound_dir / 'background_channel.csv', sep=';')
 ########
 
 random.seed(444)
-database_dir = Path("D:/Database_20240315_Desync")               
+database_dir = Path("./Database_20240315_Desync")              
 database_df = database(normch1_df, normch2_df, save_dir = database_dir,
                          d_min = 10, d_max = 80,
                          richness_list = [1, 2, 3, 4 ,5 , 6, 7, 8], 

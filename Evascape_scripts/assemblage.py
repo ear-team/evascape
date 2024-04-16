@@ -11,16 +11,17 @@ Created on Fri Mar 10 11:22:33 2023
 
 import numpy as np
 import pandas as pd
-import maad as maad
+from pathlib import Path
+from maad import spl
 import soundfile
 import scipy
 import random
 import time
 import os
-from toolbox import addin, flatsound, waveread, bracket_ramp, reverb
+from toolbox import addin, flatsound, waveread, bracket_ramp
 from bird_behavior import bird_behavior, check_songlen, overlap_amount
 from pathlib import Path
-from  itertools import product, combinations
+from itertools import product, combinations
 
 def database_presets(channel1_list, channel2_list, richness_list, abundance_lvls, 
                      sample_size, all_combinations = True):
@@ -83,7 +84,7 @@ def singing_session(song_df, bird_filename, duration = 60, samprate = 44100):
     birdsong_df = song_df.loc[song_df.bird_filename == bird_filename]
     session_vector = flatsound(val = 0, d = duration, sr = samprate)
     for song in birdsong_df.index :
-        song_vector = waveread(birdsong_df.song_fullfilename[song])
+        song_vector = waveread(Path(birdsong_df.song_fullfilename[song]))
         session_vector = addin(base_sound = session_vector, 
                                added_sound = song_vector, 
                                time_code = birdsong_df.min_t[song], 
@@ -118,10 +119,10 @@ def assemblage(normch1_df, normch2_df, abundance_df,
     channel1_vector = flatsound(val = 0, d = duration, sr = samprate)
     
     for song in song_df.index:
-        song_vector = waveread(song_df.song_fullfilename[song])
+        song_vector = waveread(Path(song_df.song_fullfilename[song]))
         bird_distance = int(song_df.distance[song])
         if bird_distance != 0:
-            song_vector = maad.spl.apply_attenuation(song_vector, samprate, r = bird_distance)
+            song_vector = spl.apply_attenuation(song_vector, samprate, r = bird_distance)
         channel1_vector = addin(base_sound = channel1_vector, 
                                added_sound = song_vector, 
                                time_code = song_df.min_t[song], 
@@ -137,7 +138,7 @@ def assemblage(normch1_df, normch2_df, abundance_df,
         soundtype_df = normch2_df.loc[normch2_df.categories == 'ambient_sound']
         channel2_filename = random.choice(soundtype_df.index)
         channel2_fullfilename = normch2_df.norm_fullfilename[channel2_filename]
-        channel2_vector = waveread(channel2_fullfilename)
+        channel2_vector = waveread(Path(channel2_fullfilename))
         dB_var = 50
         quiet_factor = 1 / 10**(dB_var/20)
         channel2_vector = channel2_vector * quiet_factor
@@ -145,7 +146,7 @@ def assemblage(normch1_df, normch2_df, abundance_df,
         soundtype_df = normch2_df.loc[normch2_df.categories == channel2]
         channel2_filename = random.choice(soundtype_df.index)
         channel2_fullfilename = normch2_df.norm_fullfilename[channel2_filename]
-        channel2_vector = waveread(channel2_fullfilename)
+        channel2_vector = waveread(Path(channel2_fullfilename))
         
     stop = int(np.round(duration * samprate, 2)) 
     channel2_vector = channel2_vector[:stop]
@@ -165,6 +166,9 @@ def assemblage(normch1_df, normch2_df, abundance_df,
  
     tosave_vector = bracket_ramp(final_vector - np.mean(final_vector),
                                  fade_duration = 0.10) #delete DC offset + add a ramp
+    
+    # tosave_vector = bracket_ramp(final_vector,
+    #                              fade_duration = 0.10)
     
     return tosave_vector, song_df 
     
