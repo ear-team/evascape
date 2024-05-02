@@ -169,26 +169,16 @@ def plot_indices(
         # calculate the mean and the standard deviation of the index for each channel2 in the dataframe df
         mean_df = df[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).apply(np.mean, axis=0)
 
-        # calculate the margin of error
-        # from https://datagy.io/python-confidence-intervals/
-        # length of the sample (number of unique values in the GT column)
-        n = len(df[GT].unique())
-        # Calculating Degrees of Freedom
-        dof = n - 1    
-        # Confidence Level      
-        confidence_level = 0.95 
-        # alpha
-        alpha = 1 - confidence_level
-        t_critical = t.ppf(1 - alpha / 2, dof)
-
-        # margin_error_df = t_critical * df[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).apply(np.std, axis=0, ddof=1) / np.sqrt(n)
-        margin_error_df = df[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).apply(np.std, axis=0, ddof=1) / np.sqrt(n)
+        # calculate the stard error of the mean
+        # from https://www.statology.org/standard-error-of-mean-python/
+        n = df[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).count()
+        error_df = df[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).apply(np.std, axis=0, ddof=1) / np.sqrt(n)
 
         # calculate the average mean of the index for each GT
         average_mean_df = mean_df.reset_index(level='channel2', drop=True).groupby([GT]).apply(np.mean, axis=0)
 
-        # merge mean and stdv dataframes
-        mean_df = pd.merge(mean_df, margin_error_df, on = ['channel2',GT], suffixes = ('_mean', '_stdv'))
+        # merge mean and margin_error dataframes
+        mean_df = pd.merge(mean_df, error_df, on = ['channel2',GT], suffixes = ('_mean', '_stdv'))
 
         # reset the index
         mean_df = mean_df.reset_index()
@@ -224,7 +214,6 @@ def plot_indices(
         axs[jj].autoscale()
             
     handles, labels = axs[0].get_legend_handles_labels()
-    labels = labels
     fig.legend(handles, labels, fontsize = 20, bbox_to_anchor=(1.1, 0.65))
     fig.suptitle(index, fontsize = 40, x = 1, y=0.8)
     

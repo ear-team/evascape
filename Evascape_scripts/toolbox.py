@@ -11,9 +11,8 @@ Created on Mon Mar 21 10:34:04 2022
 import numpy as np
 import librosa
 import soundfile
-import maad
+from maad import sound, util
 from pathlib import Path
-
 
 #general settings
 duration = 3 #sound duration in seconds
@@ -135,7 +134,7 @@ def waveread(file_name, samprate=44100):
 def peak_normalize(song_array, peak_value, dBSPL = False , save_path = None, samprate = 44100): 
     if dBSPL == True:
         # convert dBSPL in wave amplitude
-        peak_wave = maad.util.dBSPL2wav(peak_value)
+        peak_wave = util.dBSPL2wav(peak_value)
         norm_song = song_array/np.amax(np.absolute(song_array))*peak_wave
     else: # peak_value is given in wave amplitude
         norm_song = song_array/np.amax(np.absolute(song_array))*peak_value
@@ -148,7 +147,7 @@ def one_normalize(song_array):
     return song_array / max_array
 
 def rms_normalize(song_array):
-    rms_power =  maad.util.rms(song_array)
+    rms_power =  util.rms(song_array)
     return (song_array / rms_power)
 
 
@@ -169,15 +168,16 @@ def rms_normalize(song_array):
 #         impulse_response = one_normalize(impulse_response)   
 #     return np.convolve(signal, impulse_response)
 
-def show_spectrogram(sound, min_freq = 0, max_freq = 20000, vmin = None, vmax = None, samprate = 44100):
+def show_spectrogram(s, min_freq = 0, max_freq = 20000, vmin = None, vmax = None, samprate = 44100):
     N = 4096
-    Sxx_power,tn,fn,ext = maad.sound.spectrogram(sound, 
-                                                 samprate, 
-                                                 nperseg=N, 
-                                                 noverlap=N//2, 
-                                                 flims = [min_freq, max_freq],
-                                                 mode = 'amplitude')
-    Sxx_dB = maad.util.power2dB(Sxx_power) # convert into dB
+    Sxx_power,tn,fn,ext = sound.spectrogram(
+                                        s, 
+                                        samprate, 
+                                        nperseg=N, 
+                                        noverlap=N//2, 
+                                        flims = [min_freq, max_freq],
+                                        mode = 'amplitude')
+    Sxx_dB = util.power2dB(Sxx_power) # convert into dB
     fig_kwargs = {'vmax': vmax,
                       'vmin':vmin,
                       'extent':ext,
@@ -186,5 +186,5 @@ def show_spectrogram(sound, min_freq = 0, max_freq = 20000, vmin = None, vmax = 
                       'xlabel':'Time [sec]',
                       'ylabel':'Frequency [Hz]',
                       }
-    ax, fig = maad.util.plot2d(Sxx_dB,**fig_kwargs)
+    ax, fig = util.plot2d(Sxx_dB,**fig_kwargs)
     return fig
