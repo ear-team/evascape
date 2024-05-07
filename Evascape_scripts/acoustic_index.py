@@ -12,7 +12,7 @@ from toolbox import waveread
 from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import pearsonr
+from scipy.stats import pearsonr, spearmanr
 from scipy.stats import t
 
 # indexes from Morrison et al 2021 
@@ -116,8 +116,8 @@ def plot_indices(
             **kwargs):
 
     default_info_dic = {'channel2' : [
-                            'ambient_sound', 
-                            'quiet', 
+                            'quiet',
+                            'ambient_sound',  
                             'aircraft_pw01',
                             'aircraft_pw02',
                             'rain_pw01', 
@@ -128,8 +128,8 @@ def plot_indices(
                             'wind_pw02', 
                             'wind_pw03'],
                         'color': [
-                            'black', 
                             'grey', 
+                            'black', 
                             'violet',
                             'darkviolet',
                             'deepskyblue', 
@@ -140,8 +140,8 @@ def plot_indices(
                             'red', 
                             'brown'],
                         'label' : [
+                            'no background', 
                             'ambient sound', 
-                            'quiet', 
                             'light aircraft noise',
                             'strong aircraft noise',
                             'light rain', 
@@ -161,18 +161,43 @@ def plot_indices(
     # create a copy of the dataframe indices_df
     df = indices_df.copy()
 
+    # sort the column channel2 following info_dic['channel2']
+    df['channel2'] = pd.Categorical(df['channel2'], info_dic['channel2'])
+
     # create a figure with 2 subplots
-    fig, axs = plt.subplots(nrows = 1, ncols = 2, sharey='row', figsize=(width,height))
+    fig, axs = plt.subplots(nrows = 1, ncols = 2, sharey='row', figsize=(width,height), gridspec_kw={'width_ratios': [8, 5]})
+
+
+    # filter the dataframe to keep only the rows where the richness or the abundance is equal to 1
+    df = df[(df['abundance'] == 1)|(df['richness'] == 1)]
 
     for jj, GT in enumerate(['richness','abundance']): 
+        print("----- {} {} -----".format(INDICE, GT))
 
-        # calculate the mean and the standard deviation of the index for each channel2 in the dataframe df
-        mean_df = df[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).apply(np.mean, axis=0)
+        # filter the dataframe to keep only the rows where the GT is equal to
+        if GT == 'richness':
+            subdf = df[(df['abundance']==1)]
+        else :
+            subdf = df[(df['richness']==1)]
 
-        # calculate the stard error of the mean
+        # print the spearman correlation coefficient between the mean of the index and the GT
+        for CH2 in subdf['channel2'].unique():
+            r, p = spearmanr(subdf[subdf["channel2"]==CH2][INDICE], subdf[subdf["channel2"]==CH2][GT])
+
+            if (p < 0.05/len(subdf[subdf["channel2"]==CH2][INDICE])):
+                # print("{:>20} \t {:.2f}*".format(CH2, r))
+                print("{:.2f}*".format(r))
+            else:
+                print("{:.2f}".format(r))
+
+        # calculate the mean and the standard deviation of the index for each channel2 in the dataframe subdf
+        mean_df = subdf[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).apply(np.mean, axis=0)
+
+        # calculate the standard error of the mean
         # from https://www.statology.org/standard-error-of-mean-python/
-        n = df[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).count()
-        error_df = df[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).apply(np.std, axis=0, ddof=1) / np.sqrt(n)
+        n = subdf[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).count()
+        # print("count : {}".format(n))
+        error_df = subdf[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).apply(np.std, axis=0, ddof=1) / np.sqrt(n)
 
         # calculate the average mean of the index for each GT
         average_mean_df = mean_df.reset_index(level='channel2', drop=True).groupby([GT]).apply(np.mean, axis=0)
@@ -209,6 +234,7 @@ def plot_indices(
                 label = info_dic['label'][info_dic['channel2'].index(key[0])],
                 color = info_dic['color'][info_dic['channel2'].index(key[0])]
             )
+            
             
         axs[jj].set_xlabel(GT,fontsize = 25)
         axs[jj].autoscale()
