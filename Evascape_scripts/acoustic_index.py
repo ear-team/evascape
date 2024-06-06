@@ -27,7 +27,7 @@ from scipy.stats import t
 # roi index :
     
 #setup
-samprate = 44100
+SAMPLING_RATE = 44100
 
 # load database dataframe
 #temp_dir = Path('C:/Users/ecoac-field/OneDrive/Documents/Articles-Recherches/Reconstructor/Samples/temp')
@@ -44,11 +44,11 @@ samprate = 44100
 
 
 #Indices computing
-def compute_all_indices(database_df, samprate = 44100):
+def compute_all_indices(database_df, root_dir, samprate=SAMPLING_RATE):
     indices_df = database_df.copy()
     file_count = 1
     for file in indices_df.index:
-        path = Path(indices_df.fullfilename[file])
+        path = Path(root_dir) / Path(indices_df.fullfilename[file])
         vector = waveread(path)
         vector[vector == 0] = 10**(-8)
         
@@ -57,20 +57,8 @@ def compute_all_indices(database_df, samprate = 44100):
         Sxx_power[Sxx_power == 0] = 10**(-25)
         
         #ROI indices
-        Sxx_noNoise= sound.median_equalizer(Sxx_power)
-        Sxx_dB_noNoise = util.power2dB(Sxx_noNoise)
-        #Sxx_dB_noNoise[Sxx_dB_noNoise == 0] = 10**(-10)
-        # nROI, aROI = features.region_of_interest_index(Sxx_dB_noNoise, 
-        #                                                             tn, fn, 
-        #                                                             smooth_param1 = 1,
-        #                                                             mask_mode='absolute', 
-        #                                                             mask_param1 = 10, 
-        #                                                             mask_param2 = 3, 
-        #                                                             remove_rain = False,
-        #                                                             max_ratio_xy = 10,
-        #                                                             display=False)
         nROI, aROI = region_of_interest_index2(Sxx_power, tn, fn,   
-                                        seed_level=13, 
+                                        seed_level=12, 
                                         low_level=6, 
                                         fusion_rois=(0.05, 100), # (seconds, hertz) ,
                                         remove_rois_fmin_lim = (50,20000),
@@ -88,7 +76,7 @@ def compute_all_indices(database_df, samprate = 44100):
         #Classic indices (from Alcocer et al. 2022)
         _, _ , ACI = features.acoustic_complexity_index(Sxx_power)
         indices_df.loc[file, 'ACI'] = ACI
-          
+        
         Hf, Ht_per_bin = features.frequency_entropy(Sxx_power)
         Ht = features.temporal_entropy (vector)
         indices_df.loc[file, 'H'] = Hf * Ht
@@ -105,7 +93,7 @@ def compute_all_indices(database_df, samprate = 44100):
         
         print(f'{file}\t{file_count}/{len(indices_df)}')
         file_count += 1
-              
+        
     return indices_df
 
 def plot_indices(
@@ -212,35 +200,86 @@ def plot_indices(
         # rename the last column of the dataframe averagemean_df to INDICE
         average_mean_df.columns = [GT,INDICE]
 
-        average_mean_df.plot(
-            x = GT, 
-            y = INDICE, 
-            ax = axs[jj], 
-            legend = 0, 
-            linewidth = 4,
-            color = 'black', 
-            linestyle = 'dashed', 
-            label = 'average')
 
-        for key, grp in mean_df.groupby(['channel2']):
-            grp.plot(
-                x = GT, 
-                y = INDICE+'_mean', 
-                fontsize=20,
-                yerr = INDICE+'_stdv', 
-                ax = axs[jj], 
-                legend = 0,
-                linewidth = 2.5, 
-                label = info_dic['label'][info_dic['channel2'].index(key[0])],
-                color = info_dic['color'][info_dic['channel2'].index(key[0])]
-            )
+        # plot box plots of the INDICE for each channel2
+        import seaborn as sns
+        sns.set_theme(context='talk', style='whitegrid')
+        
+        # Create the box plot
+        sns.boxplot(
+            data=subdf,
+            x=GT,
+            y=INDICE,
+            hue='channel2',
+            ax=axs[jj],
+            fill=True, 
+            legend='brief',
+            gap=.1,
+            notch=True, 
+            palette = info_dic['color'],
+            saturation=1,
+            linewidth=0,
             
+            # linecolor= info_dic['color'],
+            # whiskerprops=dict(info_dic['color']),
+            # boxprops=dict(facecolor=info_dic['color'],
+            #                color=info_dic['color']),
+            # capprops=dict(info_dic['color']),
+            # flierprops=dict(color=info_dic['color'], 
+            #                 markeredgecolor=info_dic['color']),
+            )
+
+        # # Loop through each hue category
+        for container, color in zip(axs[jj].containers, info_dic['color']):
+
+            for flier in container.fliers:
+                flier.set(marker='o', color=color, alpha=0.5)
+                flier.set_color(color)
+
+            # Set whisker caps (endpoints)
+            for line in container.whiskers:
+                line.set_color(color)  # color for whisker caps and lines
+                line.set_linewidth(1)  # thickness of whisker caps and lines
+# boxplot(data,
+#                 notch=True, patch_artist=True,
+#                 boxprops=dict(facecolor=info_dic['color'], color=info_dic['color']),
+#                 capprops=dict(info_dic['color']),
+#                 whiskerprops=dict(color=BIOME_COLOR[BIOME]),
+#                 flierprops=dict(color=BIOME_COLOR[BIOME], markeredgecolor=BIOME_COLOR[BIOME]),
+#                 medianprops=dict(color=BIOME_COLOR[BIOME]))
+        
+        axs[jj].get_legend().remove()
+
+        # average_mean_df.plot(
+        #     x = GT, 
+        #     y = INDICE, 
+        #     ax = axs[jj], 
+        #     legend = 0, 
+        #     linewidth = 4,
+        #     color = 'black', 
+        #     linestyle = 'dashed', 
+        #     label = 'average')
+
+        # for key, grp in mean_df.groupby(['channel2']):
+        #     grp.plot(
+        #         x = GT, 
+        #         y = INDICE+'_mean', 
+        #         fontsize=20,
+        #         # yerr = INDICE+'_stdv', 
+        #         ax = axs[jj], 
+        #         legend = 0,
+        #         linewidth = 1, 
+        #         label = info_dic['label'][info_dic['channel2'].index(key[0])],
+        #         color = info_dic['color'][info_dic['channel2'].index(key[0])]
+        #     )
+        
+
             
         axs[jj].set_xlabel(GT,fontsize = 25)
         axs[jj].autoscale()
             
     handles, labels = axs[0].get_legend_handles_labels()
-    fig.legend(handles, labels, fontsize = 20, bbox_to_anchor=(1.1, 0.65))
+    fig.legend(handles, info_dic['label'], fontsize = 20, bbox_to_anchor=(1.1, 0.65))
     fig.suptitle(index, fontsize = 40, x = 1, y=0.8)
     
     return fig
