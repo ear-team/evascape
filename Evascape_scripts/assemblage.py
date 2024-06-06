@@ -95,7 +95,7 @@ def singing_session(song_df, bird_filename, duration = 60, samprate = 44100):
 def assemblage(normch1_df, normch2_df, abundance_df, 
                d_min, d_max, impulse_response = None, 
                channel2 = 'ambient_sound', random_behavior = False,
-               duration = 60, samprate = 44100):
+               index_test = False, duration = 60, samprate = 44100):
     
     #channel 1 
     tot_abundance = sum(abundance_df.abundance)
@@ -119,10 +119,10 @@ def assemblage(normch1_df, normch2_df, abundance_df,
     channel1_vector = flatsound(val = 0, d = duration, sr = samprate)
     
     for song in song_df.index:
-        song_vector = waveread(Path(song_df.song_fullfilename[song]))
+        song_vector = waveread(song_df.song_fullfilename[song])
         bird_distance = int(song_df.distance[song])
         if bird_distance != 0:
-            song_vector = spl.apply_attenuation(song_vector, samprate, r = bird_distance)
+            song_vector = maad.spl.apply_attenuation(song_vector, samprate, r = bird_distance)
         channel1_vector = addin(base_sound = channel1_vector, 
                                added_sound = song_vector, 
                                time_code = song_df.min_t[song], 
@@ -133,20 +133,22 @@ def assemblage(normch1_df, normch2_df, abundance_df,
                                  impulse_response = impulse_response)
     
     #channel 2
-    if channel2 == 'quiet':
+    if channel2 == 'no_background':
+        channel2_filename = channel2_fullfilename = 'None'
         channel2_vector = flatsound(val = 0, d= duration, sr = samprate)
-        soundtype_df = normch2_df.loc[normch2_df.categories == 'ambient_sound']
-        channel2_filename = random.choice(soundtype_df.index)
-        channel2_fullfilename = normch2_df.norm_fullfilename[channel2_filename]
-        channel2_vector = waveread(Path(channel2_fullfilename))
-        dB_var = 50
-        quiet_factor = 1 / 10**(dB_var/20)
-        channel2_vector = channel2_vector * quiet_factor
+        if index_test == True:
+            soundtype_df = normch2_df.loc[normch2_df.categories == 'ambient_sound']
+            channel2_filename = random.choice(soundtype_df.index)
+            channel2_fullfilename = normch2_df.norm_fullfilename[channel2_filename]
+            channel2_vector = waveread(channel2_fullfilename)
+            dB_var = 50
+            quiet_factor = 1 / 10**(dB_var/20)
+            channel2_vector = channel2_vector * quiet_factor
     else :
         soundtype_df = normch2_df.loc[normch2_df.categories == channel2]
         channel2_filename = random.choice(soundtype_df.index)
         channel2_fullfilename = normch2_df.norm_fullfilename[channel2_filename]
-        channel2_vector = waveread(Path(channel2_fullfilename))
+        channel2_vector = waveread(channel2_fullfilename)
         
     stop = int(np.round(duration * samprate, 2)) 
     channel2_vector = channel2_vector[:stop]
@@ -165,10 +167,7 @@ def assemblage(normch1_df, normch2_df, abundance_df,
         final_vector = final_vector / max(final_vector)
  
     tosave_vector = bracket_ramp(final_vector - np.mean(final_vector),
-                                 fade_duration = 0.10) #delete DC offset + add a ramp
-    
-    # tosave_vector = bracket_ramp(final_vector,
-    #                              fade_duration = 0.10)
+                                 fade_duration = 0.10) #remove DC offset + add a ramp
     
     return tosave_vector, song_df 
     
@@ -178,7 +177,7 @@ def database(normch1_df, normch2_df, save_dir, d_min, d_max,
              abundance_lvls = [1, 2, 3, 4 ,5],  
              channel1_list = ["erirub", "fricoe", "perate","phycol", "regreg", "sylatr", "turmer", "turphi"],
              channel2_list = ['quiet','ambient_sound','rain_pw02','wind_pw02', 'tettigonia_veridissima'],
-             impulse_response = None, random_behavior = False, anonymous_ID = False, database_label = 'evascape',
+             impulse_response = None, random_behavior = False, index_test = False, anonymous_ID = False, database_label = 'evascape',
              all_combinations = False, sample_size = 1, duration = 60, samprate = 44100):
     
     global_start = time.time()
@@ -227,6 +226,7 @@ def database(normch1_df, normch2_df, save_dir, d_min, d_max,
                                                    impulse_response = impulse_response,
                                                    channel2 = channel2,
                                                    random_behavior = random_behavior,
+                                                   index_test = index_test,
                                                    duration = duration, 
                                                    samprate = samprate)
 

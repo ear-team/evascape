@@ -263,7 +263,7 @@ database_df = database(normch1_df, normch2_df, save_dir = database_dir,
                                           'rain_pw02','rain_pw03','wind_pw01',
                                           'wind_pw02','wind_pw03', 'aircraft_pw01',
                                           'aircraft_pw02', 'tettigonia_veridissima'],
-                         impulse_response = None, random_behavior = False, anonymous_ID = False,
+                         impulse_response = None, random_behavior = False, index_test = False, anonymous_ID = False,
                          all_combinations = False, sample_size = 10, duration = 100, samprate = 44100)
 database_df.to_csv(database_dir / 'database_data.csv', sep=';')
 
@@ -380,6 +380,7 @@ for condition in condition_df.index :
                              channel2_list = background_cond,
                              impulse_response = None, 
                              random_behavior = not(condition_df.Behavior[condition]), 
+                             index_test = False,
                              anonymous_ID = True,
                              database_label = f'evascape_{condition}',
                              all_combinations = False, 
