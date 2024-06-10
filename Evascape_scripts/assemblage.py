@@ -12,8 +12,7 @@ Created on Fri Mar 10 11:22:33 2023
 import numpy as np
 import pandas as pd
 from pathlib import Path
-from maad import spl
-import soundfile
+from maad import sound, spl
 import scipy
 import random
 import time
@@ -23,8 +22,38 @@ from bird_behavior import bird_behavior, check_songlen, overlap_amount
 from pathlib import Path
 from itertools import product, combinations
 
-def database_presets(channel1_list, channel2_list, richness_list, abundance_lvls, 
-                     sample_size, all_combinations = True):
+def database_presets(
+                channel1_list, 
+                channel2_list, 
+                richness_list, 
+                abundance_lvls, 
+                sample_size, 
+                all_combinations = True):
+
+    """
+    Generate a database dataframe with all possible combinations of species and abundance levels
+
+    Parameters
+    ----------
+    channel1_list : list
+        list of species names
+    channel2_list : list
+        list of background sound names
+    richness_list : list
+        list of richness levels
+    abundance_lvls : list
+        list of abundance levels
+    sample_size : int
+        number of samples per combination
+    all_combinations : bool, optional
+        if True, all possible combinations of species are generated, by default True
+        
+    Returns
+    -------
+    database_df : pandas dataframe
+        dataframe with all possible combinations of species and abundance levels
+    """
+
     database_col = ['filename', 'fullfilename', 'sample_id', 'channel2', 'richness', 'abundance'] + channel1_list
     sample_list = list(range(1,sample_size + 1))
     empty_array = np.zeros([1,len(channel1_list)])[0]
@@ -50,7 +79,7 @@ def database_presets(channel1_list, channel2_list, richness_list, abundance_lvls
                 distribution_df = empty_df.copy()
                 distribution_df.loc[species_list,] = abundance
                 database_list += [[richness] + [abundance] + [variables_prod.channel2[i]] 
-                                  + [sample_id] + list(distribution_df.abundance)]
+                                    + [sample_id] + list(distribution_df.abundance)]
                 if sample_id == sample_max:
                     sample_id = 1 
                 else :
@@ -61,9 +90,9 @@ def database_presets(channel1_list, channel2_list, richness_list, abundance_lvls
     else :
         variables_prod = list(product(richness_list, abundance_lvls, channel2_list, sample_list))
         database_df = pd.DataFrame(variables_prod,
-                                   columns = ['richness', 'abundance', 'channel2','sample_id']).reindex(columns=database_col)
+                                    columns = ['richness', 'abundance', 'channel2','sample_id']).reindex(columns=database_col)
         database_df[channel1_list] = np.zeros([len(database_df),len(channel1_list)]).astype('int')
- 
+
         for channel2 in channel2_list:
             for abundance in abundance_lvls:
                 for richness in richness_list:               
@@ -79,25 +108,92 @@ def database_presets(channel1_list, channel2_list, richness_list, abundance_lvls
     
     return database_df
 
+def singing_session(song_df, 
+                    bird_filename, 
+                    duration = 60, 
+                    samprate = 44100):
 
-def singing_session(song_df, bird_filename, duration = 60, samprate = 44100):
+    """
+    Generate a singing session from a dataframe of bird songs
+
+    Parameters
+    ----------
+    song_df : pandas dataframe
+        dataframe with bird songs metadata
+    bird_filename : str
+        bird name
+    duration : int, optional
+        duration of the session in seconds, by default 60
+    samprate : int, optional
+        sampling rate of the session, by default 44100
+
+    Returns
+    -------
+    session_vector : numpy array
+        array of the session sound
+    """
+
     birdsong_df = song_df.loc[song_df.bird_filename == bird_filename]
     session_vector = flatsound(val = 0, d = duration, sr = samprate)
     for song in birdsong_df.index :
         song_vector = waveread(Path(birdsong_df.song_fullfilename[song]))
-        session_vector = addin(base_sound = session_vector, 
-                               added_sound = song_vector, 
-                               time_code = birdsong_df.min_t[song], 
-                               ramp_duration = 0.10, sr = samprate) #check fade duration = config 
+        session_vector = addin(
+                            base_sound = session_vector, 
+                            added_sound = song_vector, 
+                            time_code = birdsong_df.min_t[song], 
+                            ramp_duration = 0.10, sr = samprate) #check fade duration = config 
     return session_vector
 
+def assemblage(
+        normch1_df, 
+        normch2_df, 
+        abundance_df, 
+        d_min, 
+        d_max, 
+        impulse_response = None, 
+        channel2 = 'ambient_sound', 
+        random_behavior = False,
+        index_test = False, 
+        duration = 60, 
+        samprate = 44100):
 
-def assemblage(normch1_df, normch2_df, abundance_df, 
-               d_min, d_max, impulse_response = None, 
-               channel2 = 'ambient_sound', random_behavior = False,
-               index_test = False, duration = 60, samprate = 44100):
+    """
+    Generate a soundscape from a dataframe of bird songs and ambient sounds
+
+    Parameters
+    ----------
+    normch1_df : pandas dataframe
+        dataframe with bird songs metadata
+    normch2_df : pandas dataframe
+        dataframe with ambient sounds metadata
+    abundance_df : pandas dataframe
+        dataframe with bird species and abundance levels
+    d_min : int 
+        minimum distance of the birds
+    d_max : int 
+        maximum distance of the birds
+    impulse_response : numpy array, optional    
+        impulse response of the soundscape, by default None
+    channel2 : str, optional    
+        type of ambient sound, by default 'ambient_sound'
+    random_behavior : bool, optional    
+        if True, all intersing intervals are random, by default False
+    index_test : bool, optional 
+        if True, a random ambient sound is added, by default False
+    duration : int, optional    
+        duration of the soundscape in seconds, by default 60
+    samprate : int, optional    
+        sampling rate of the soundscape, by default 44100
+
+    Returns
+    -------
+    tosave_vector : numpy array 
+        array of the soundscape sound
+    song_df : pandas dataframe  
+        dataframe with soundscape metadata
+    """ 
     
-    #channel 1 
+    # channel 1 : Bird songs
     tot_abundance = sum(abundance_df.abundance)
     bird_nb = 0
     songlen_good = False
@@ -122,17 +218,17 @@ def assemblage(normch1_df, normch2_df, abundance_df,
         song_vector = waveread(song_df.song_fullfilename[song])
         bird_distance = int(song_df.distance[song])
         if bird_distance != 0:
-            song_vector = maad.spl.apply_attenuation(song_vector, samprate, r = bird_distance)
+            song_vector = spl.apply_attenuation(song_vector, samprate, r0=1, r=bird_distance)
         channel1_vector = addin(base_sound = channel1_vector, 
-                               added_sound = song_vector, 
-                               time_code = song_df.min_t[song], 
-                               ramp_duration = 0.10, sr = samprate)
+                                added_sound = song_vector, 
+                                time_code = song_df.min_t[song], 
+                                ramp_duration = 0.10, sr = samprate)
     
-    if isinstance(impulse_response, np.ndarray):
-        channel1_vector = reverb(signal = channel1_vector, 
-                                 impulse_response = impulse_response)
+    # if isinstance(impulse_response, np.ndarray):
+    #     channel1_vector = reverb(signal = channel1_vector, 
+    #                             impulse_response = impulse_response)
     
-    #channel 2
+    #channel 2 : background sound
     if channel2 == 'no_background':
         channel2_filename = channel2_fullfilename = 'None'
         channel2_vector = flatsound(val = 0, d= duration, sr = samprate)
@@ -160,32 +256,48 @@ def assemblage(normch1_df, normch2_df, abundance_df,
     
     #final assemblage
     final_vector = addin(base_sound = channel2_vector, 
-                           added_sound = channel1_vector, 
-                           time_code = 0, 
-                           ramp_duration = 0, sr = samprate)
+                        added_sound = channel1_vector, 
+                        time_code = 0, 
+                        ramp_duration = 0, sr = samprate)
     if max(final_vector) > 1: # ok ?
         final_vector = final_vector / max(final_vector)
- 
+    
     tosave_vector = bracket_ramp(final_vector - np.mean(final_vector),
-                                 fade_duration = 0.10) #remove DC offset + add a ramp
+                                fade_duration = 0.10) #remove DC offset + add a ramp
     
     return tosave_vector, song_df 
     
 
-def database(normch1_df, normch2_df, save_dir, d_min, d_max,
-             richness_list = [1, 2, 3, 4 ,5 , 6, 7, 8], 
-             abundance_lvls = [1, 2, 3, 4 ,5],  
-             channel1_list = ["erirub", "fricoe", "perate","phycol", "regreg", "sylatr", "turmer", "turphi"],
-             channel2_list = ['quiet','ambient_sound','rain_pw02','wind_pw02', 'tettigonia_veridissima'],
-             impulse_response = None, random_behavior = False, index_test = False, anonymous_ID = False, database_label = 'evascape',
-             all_combinations = False, sample_size = 1, duration = 60, samprate = 44100):
+def database(
+        normch1_df, 
+        normch2_df, 
+        save_dir, 
+        d_min, 
+        d_max,
+        richness_list = [1, 2, 3, 4 ,5 , 6, 7, 8], 
+        abundance_lvls = [1, 2, 3, 4 ,5],  
+        channel1_list = ["erirub", "fricoe", "perate","phycol", "regreg", "sylatr", "turmer", "turphi"],
+        channel2_list = ['no_background','ambient_sound','rain_pw02','wind_pw02', 'tettigonia_veridissima'],
+        impulse_response = None, 
+        random_behavior = False, 
+        index_test = False, 
+        anonymous_ID = False, 
+        database_label = 'evascape',
+        all_combinations = False, 
+        sample_size = 1, 
+        duration = 60, 
+        samprate = 44100):
     
     global_start = time.time()
                         
     #database generation
-    database_df = database_presets(channel1_list = channel1_list, channel2_list = channel2_list, 
-                                   richness_list = richness_list, abundance_lvls = abundance_lvls,
-                                   sample_size = sample_size, all_combinations = all_combinations)    
+    database_df = database_presets(
+                            channel1_list = channel1_list, 
+                            channel2_list = channel2_list, 
+                            richness_list = richness_list, 
+                            abundance_lvls = abundance_lvls,
+                            sample_size = sample_size, 
+                            all_combinations = all_combinations)    
     
     availablesongs_df = normch1_df.copy()
     
@@ -207,30 +319,31 @@ def database(normch1_df, normch2_df, save_dir, d_min, d_max,
             if available_nb == 0 or reset_df.is_reset[species] == True :
                 added_df = normch1_df[normch1_df.categories == species]
                 availablesongs_df = pd.concat([availablesongs_df,added_df])
-                reset_df.is_reset[species] == False
-            elif  diff < 0: #add birds from the species to availablesongs_df if needed
+                # reset_df.is_reset[species] == False
+            elif  diff < 0: # add birds from the species to availablesongs_df if needed
                 all_birds = normch1_df[normch1_df.categories == species].source_filename.unique()
                 notavailable_birds = [i for i in all_birds if i not in available_birds]
-                #print(f'available birds : {available_birds}/t available_nb = {available_nb} /t diff = {diff} /t notavailable_birds : {notavailable_birds}')
+                # print(f'available birds : {available_birds}/t available_nb = {available_nb} /t diff = {diff} /t notavailable_birds : {notavailable_birds}')
                 added_birds = random.sample(notavailable_birds, k = abs(diff))
                 added_df = normch1_df[normch1_df.source_filename.isin(added_birds)]
                 availablesongs_df = pd.concat([availablesongs_df,added_df])
-                reset_df.is_reset[species] == True
+                # reset_df.is_reset[species] == True
         
         # soundscape reconstruction
-        reconstructed_vector, file_df = assemblage(normch1_df = availablesongs_df, 
-                                                   normch2_df = normch2_df, 
-                                                   abundance_df = abundance_df,  
-                                                   d_min = d_min, 
-                                                   d_max = d_max,
-                                                   impulse_response = impulse_response,
-                                                   channel2 = channel2,
-                                                   random_behavior = random_behavior,
-                                                   index_test = index_test,
-                                                   duration = duration, 
-                                                   samprate = samprate)
+        reconstructed_vector, file_df = assemblage(
+                                    normch1_df = availablesongs_df, 
+                                    normch2_df = normch2_df, 
+                                    abundance_df = abundance_df,  
+                                    d_min = d_min, 
+                                    d_max = d_max,
+                                    impulse_response = impulse_response,
+                                    channel2 = channel2,
+                                    random_behavior = random_behavior,
+                                    index_test = index_test,
+                                    duration = duration, 
+                                    samprate = samprate)
 
-        #remove used birds
+        # remove used birds
         used_birds = file_df.bird_filename.unique()
         all_birds = normch1_df.source_filename.unique()
         available_birds = [i for i in all_birds if i not in used_birds]
@@ -248,11 +361,11 @@ def database(normch1_df, normch2_df, save_dir, d_min, d_max,
             save_name = f'{database_label}_{channel2}_rich{richness}_ab{abundance}_n{sample_id}'
         save_path = Path(f'{save_dir}/{save_name}.wav')
         save_path.parent.mkdir(exist_ok=True, parents=True)
-        soundfile.write(save_path, reconstructed_vector, samprate)
+        sound.write(filename=save_path, fs=samprate, data=reconstructed_vector, bit_depth=16)
         database_df.filename.loc[file] = save_name
         database_df.fullfilename.loc[file] = save_path
         
-        #saving soundscape metadata as csv file
+        # saving soundscape metadata as csv file
         csv_path = f'{save_dir}/{save_name}.csv'
         file_df.to_csv(csv_path, sep=';')
         
@@ -271,23 +384,36 @@ def database(normch1_df, normch2_df, save_dir, d_min, d_max,
 
     return database_df
 
-
 #Overlap
 
-def database_overlap(normch1_df, normch2_df, d_min, d_max,
-             channel1_list = ["erirub", "fricoe", "perate","phycol", "regreg", "sylatr", "turmer", "turphi"],
-             impulse_response = None, random_behavior = False, 
-             all_combinations = False, sample_size = 8, duration = 60, samprate = 44100):
+def database_overlap(
+            normch1_df, 
+            normch2_df, 
+            d_min, 
+            d_max,
+            channel1_list = ["erirub", "fricoe", "perate","phycol", "regreg", "sylatr", "turmer", "turphi"],
+            impulse_response = None, 
+            random_behavior = False, 
+            all_combinations = False, 
+            sample_size = 8, 
+            duration = 60, 
+            samprate = 44100):
 
                         
     #database generation
-    richness_df = database_presets(channel1_list = channel1_list, channel2_list = ['ambient_sound'], 
-                                   richness_list = [2], abundance_lvls = [1],
-                                   sample_size = sample_size, all_combinations = all_combinations)    
+    richness_df = database_presets(
+                        channel1_list = channel1_list, 
+                        channel2_list = ['ambient_sound'], 
+                        richness_list = [2], abundance_lvls = [1],
+                        sample_size = sample_size, all_combinations = all_combinations)    
     richness_df['focus'] = 'richness'
-    abundance_df = database_presets(channel1_list = channel1_list, channel2_list = ['ambient_sound'], 
-                                   richness_list = [1], abundance_lvls = [2],
-                                   sample_size = sample_size, all_combinations = all_combinations)  
+    abundance_df = database_presets(
+                        channel1_list = channel1_list, 
+                        channel2_list = ['ambient_sound'], 
+                        richness_list = [1], 
+                        abundance_lvls = [2],
+                        sample_size = sample_size, 
+                        all_combinations = all_combinations)  
     abundance_df['focus'] = 'abundance'
     database_df = pd.concat([richness_df, abundance_df])
     database_df.index = list(range(len(database_df)))
@@ -341,7 +467,7 @@ def database_overlap(normch1_df, normch2_df, d_min, d_max,
         else:
             abundance_overlap_list += [overlap]
 
-  
+
         #remove used birds
         used_birds = file_df.bird_filename.unique()
         all_birds = normch1_df.source_filename.unique()
@@ -427,7 +553,7 @@ def database_isti_detailed_analysis(all_isti_df):
 
 def database_ist_summary(temporal_analysis_df):
     selection_df = temporal_analysis_df[['categories', 'duration_mean', 'duration_std', 
-                                      'ist_mean', 'ist_std']].set_index('categories')
+                                    'ist_mean', 'ist_std']].set_index('categories')
     summary_df = selection_df.drop_duplicates()
     return summary_df
 
@@ -439,7 +565,7 @@ def ist_comparison(obs_isti_df, sim_isti_df, solo_simulation = False):
 
     obs_comp_df = obs_isti_df.copy() 
     sim_comp_df = sim_isti_df.copy()    
-     
+    
     # observed ISTI distribution
     obs_comp_df = obs_isti_df[['ist','categories']]
     obs_comp_df.columns  = ['isti','species']
@@ -447,14 +573,14 @@ def ist_comparison(obs_isti_df, sim_isti_df, solo_simulation = False):
     
     
     # simulated ISTI distribution
- 
+    
     if solo_simulation :
         richness = np.array(sim_comp_df.richness == 1)
         abundance = np.array(sim_comp_df.abundance == 1)
     else :
         richness = np.array(sim_comp_df.richness > 1)
         abundance = np.array(sim_comp_df.abundance > 1)
- 
+    
     sim_comp_df = sim_comp_df.loc[richness & abundance] 
     sim_comp_df = sim_comp_df[['isti','species']]
     sim_comp_df['origin'] = 'simulated'

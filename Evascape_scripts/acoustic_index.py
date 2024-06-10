@@ -104,7 +104,7 @@ def plot_indices(
             **kwargs):
 
     default_info_dic = {'channel2' : [
-                            'quiet',
+                            'no_background',
                             'ambient_sound',  
                             'aircraft_pw01',
                             'aircraft_pw02',

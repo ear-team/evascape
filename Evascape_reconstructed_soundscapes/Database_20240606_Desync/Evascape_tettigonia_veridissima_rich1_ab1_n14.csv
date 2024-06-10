@@ -1,0 +1,11 @@
+;song_filename;song_fullfilename;bird_filename;categories;min_t;max_t;song_len;distance
+0;MNHN-SO-2016-11232_full_0s_04_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11232_full/MNHN-SO-2016-11232_full_0s_04_norm.wav;MNHN-SO-2016-11232_full.wav;regreg;2.53;4.86;2.325333333333333;71.0
+1;MNHN-SO-2016-11232_full_0s_08_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11232_full/MNHN-SO-2016-11232_full_0s_08_norm.wav;MNHN-SO-2016-11232_full.wav;regreg;10.37;11.55;1.1839999999999975;71.0
+2;MNHN-SO-2016-11232_full_0s_02_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11232_full/MNHN-SO-2016-11232_full_0s_02_norm.wav;MNHN-SO-2016-11232_full.wav;regreg;15.35;17.33;1.9839999999999984;71.0
+3;MNHN-SO-2016-11232_full_0s_05_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11232_full/MNHN-SO-2016-11232_full_0s_05_norm.wav;MNHN-SO-2016-11232_full.wav;regreg;21.01;22.58;1.5679999999999996;71.0
+4;MNHN-SO-2016-11232_full_0s_01_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11232_full/MNHN-SO-2016-11232_full_0s_01_norm.wav;MNHN-SO-2016-11232_full.wav;regreg;29.16;31.88;2.719999999999999;71.0
+5;MNHN-SO-2016-11232_full_0s_03_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11232_full/MNHN-SO-2016-11232_full_0s_03_norm.wav;MNHN-SO-2016-11232_full.wav;regreg;35.97;38.23;2.261333333333333;71.0
+6;MNHN-SO-2016-11232_full_0s_00_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11232_full/MNHN-SO-2016-11232_full_0s_00_norm.wav;MNHN-SO-2016-11232_full.wav;regreg;45.34;47.9;2.5600000000000023;71.0
+7;MNHN-SO-2016-11232_full_0s_07_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11232_full/MNHN-SO-2016-11232_full_0s_07_norm.wav;MNHN-SO-2016-11232_full.wav;regreg;50.63;51.78;1.152000000000001;71.0
+8;MNHN-SO-2016-11232_full_0s_06_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11232_full/MNHN-SO-2016-11232_full_0s_06_norm.wav;MNHN-SO-2016-11232_full.wav;regreg;55.58;56.61;1.0346666666666664;71.0
+9;S4A04430_20190725_013000.wav;../Evascape_soundfiles/background_channel/tettigonia_veridissima/S4A04430_20190725_013000_norm.wav;;;;;;

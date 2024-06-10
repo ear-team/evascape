@@ -1,0 +1,11 @@
+;song_filename;song_fullfilename;bird_filename;categories;min_t;max_t;song_len;distance
+0;MNHN-SO-2016-9915_extr_0s_01_norm.wav;../Evascape_soundfiles/bird_channel/phycol/MNHN-SO-2016-9915_extr/MNHN-SO-2016-9915_extr_0s_01_norm.wav;MNHN-SO-2016-9915_extr.wav;phycol;2.91;5.81;2.901333333333333;70.0
+1;MNHN-SO-2016-13893_full_0s_01_norm.wav;../Evascape_soundfiles/bird_channel/turphi/MNHN-SO-2016-13893_full/MNHN-SO-2016-13893_full_0s_01_norm.wav;MNHN-SO-2016-13893_full.wav;turphi;0.59;24.41;23.81866666666667;48.0
+2;MNHN-SO-2016-9915_extr_0s_00_norm.wav;../Evascape_soundfiles/bird_channel/phycol/MNHN-SO-2016-9915_extr/MNHN-SO-2016-9915_extr_0s_00_norm.wav;MNHN-SO-2016-9915_extr.wav;phycol;11.14;13.7;2.5600000000000005;70.0
+3;MNHN-SO-2016-9915_extr_0s_04_norm.wav;../Evascape_soundfiles/bird_channel/phycol/MNHN-SO-2016-9915_extr/MNHN-SO-2016-9915_extr_0s_04_norm.wav;MNHN-SO-2016-9915_extr.wav;phycol;19.03;21.79;2.762666666666668;70.0
+4;MNHN-SO-2016-9915_extr_0s_03_norm.wav;../Evascape_soundfiles/bird_channel/phycol/MNHN-SO-2016-9915_extr/MNHN-SO-2016-9915_extr_0s_03_norm.wav;MNHN-SO-2016-9915_extr.wav;phycol;24.55;27.41;2.858666666666668;70.0
+5;MNHN-SO-2016-13893_full_0s_02_norm.wav;../Evascape_soundfiles/bird_channel/turphi/MNHN-SO-2016-13893_full/MNHN-SO-2016-13893_full_0s_02_norm.wav;MNHN-SO-2016-13893_full.wav;turphi;28.75;31.75;2.9973333333333336;48.0
+6;MNHN-SO-2016-9915_extr_0s_02_norm.wav;../Evascape_soundfiles/bird_channel/phycol/MNHN-SO-2016-9915_extr/MNHN-SO-2016-9915_extr_0s_02_norm.wav;MNHN-SO-2016-9915_extr.wav;phycol;32.26;34.38;2.1119999999999948;70.0
+7;MNHN-SO-2016-13893_full_0s_00_norm.wav;../Evascape_soundfiles/bird_channel/turphi/MNHN-SO-2016-13893_full/MNHN-SO-2016-13893_full_0s_00_norm.wav;MNHN-SO-2016-13893_full.wav;turphi;33.95;59.99;31.52;48.0
+8;MNHN-SO-2016-9915_extr_0s_05_norm.wav;../Evascape_soundfiles/bird_channel/phycol/MNHN-SO-2016-9915_extr/MNHN-SO-2016-9915_extr_0s_05_norm.wav;MNHN-SO-2016-9915_extr.wav;phycol;38.07;38.9;0.8320000000000007;70.0
+9;S4A03895_20190731_041500.wav;../Evascape_soundfiles/background_channel/wind_pw02/S4A03895_20190731_041500_norm.wav;;;;;;

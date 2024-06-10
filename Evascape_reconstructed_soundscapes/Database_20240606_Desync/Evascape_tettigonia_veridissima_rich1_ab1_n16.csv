@@ -1,0 +1,8 @@
+;song_filename;song_fullfilename;bird_filename;categories;min_t;max_t;song_len;distance
+0;MNHN-SO-2016-5491_extr_0s_02_norm.wav;../Evascape_soundfiles/bird_channel/fricoe/MNHN-SO-2016-5491_extr/MNHN-SO-2016-5491_extr_0s_02_norm.wav;MNHN-SO-2016-5491_extr.wav;fricoe;6.05;8.4;2.346666666666666;70.0
+1;MNHN-SO-2016-5491_extr_0s_03_norm.wav;../Evascape_soundfiles/bird_channel/fricoe/MNHN-SO-2016-5491_extr/MNHN-SO-2016-5491_extr_0s_03_norm.wav;MNHN-SO-2016-5491_extr.wav;fricoe;14.58;17.1;2.517333333333333;70.0
+2;MNHN-SO-2016-5491_extr_0s_06_norm.wav;../Evascape_soundfiles/bird_channel/fricoe/MNHN-SO-2016-5491_extr/MNHN-SO-2016-5491_extr_0s_06_norm.wav;MNHN-SO-2016-5491_extr.wav;fricoe;26.34;27.79;1.4506666666666703;70.0
+3;MNHN-SO-2016-5491_extr_0s_01_norm.wav;../Evascape_soundfiles/bird_channel/fricoe/MNHN-SO-2016-5491_extr/MNHN-SO-2016-5491_extr_0s_01_norm.wav;MNHN-SO-2016-5491_extr.wav;fricoe;34.16;36.76;2.6026666666666665;70.0
+4;MNHN-SO-2016-5491_extr_0s_05_norm.wav;../Evascape_soundfiles/bird_channel/fricoe/MNHN-SO-2016-5491_extr/MNHN-SO-2016-5491_extr_0s_05_norm.wav;MNHN-SO-2016-5491_extr.wav;fricoe;45.2;47.81;2.6133333333333333;70.0
+5;MNHN-SO-2016-5491_extr_0s_04_norm.wav;../Evascape_soundfiles/bird_channel/fricoe/MNHN-SO-2016-5491_extr/MNHN-SO-2016-5491_extr_0s_04_norm.wav;MNHN-SO-2016-5491_extr.wav;fricoe;54.63;57.09;2.463999999999998;70.0
+6;S4A04430_20190725_013000.wav;../Evascape_soundfiles/background_channel/tettigonia_veridissima/S4A04430_20190725_013000_norm.wav;;;;;;

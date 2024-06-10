@@ -1,0 +1,11 @@
+;song_filename;song_fullfilename;bird_filename;categories;min_t;max_t;song_len;distance
+0;MNHN-SO-2020-232_extr2_ext_0s_06_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_06_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;7.05;9.26;2.208000000000002;35.0
+1;MNHN-SO-2016-13893_full_0s_00_norm.wav;../Evascape_soundfiles/bird_channel/turphi/MNHN-SO-2016-13893_full/MNHN-SO-2016-13893_full_0s_00_norm.wav;MNHN-SO-2016-13893_full.wav;turphi;2.93;34.45;31.52;69.0
+2;MNHN-SO-2020-232_extr2_ext_0s_07_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_07_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;18.88;19.86;0.9813333333333332;35.0
+3;MNHN-SO-2020-232_extr2_ext_0s_05_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_05_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;26.84;29.58;2.7413333333333334;35.0
+4;MNHN-SO-2020-232_extr2_ext_0s_01_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_01_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;35.71;36.33;0.6293333333333333;35.0
+5;MNHN-SO-2016-13893_full_0s_02_norm.wav;../Evascape_soundfiles/bird_channel/turphi/MNHN-SO-2016-13893_full/MNHN-SO-2016-13893_full_0s_02_norm.wav;MNHN-SO-2016-13893_full.wav;turphi;37.68;40.68;2.9973333333333336;69.0
+6;MNHN-SO-2020-232_extr2_ext_0s_04_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_04_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;40.35;44.15;3.7973333333333343;35.0
+7;MNHN-SO-2016-13893_full_0s_01_norm.wav;../Evascape_soundfiles/bird_channel/turphi/MNHN-SO-2016-13893_full/MNHN-SO-2016-13893_full_0s_01_norm.wav;MNHN-SO-2016-13893_full.wav;turphi;41.67;59.99;23.81866666666667;69.0
+8;MNHN-SO-2020-232_extr2_ext_0s_00_norm.wav;../Evascape_soundfiles/bird_channel/sylatr/MNHN-SO-2020-232_extr2_ext/MNHN-SO-2020-232_extr2_ext_0s_00_norm.wav;MNHN-SO-2020-232_extr2_ext.wav;sylatr;52.51;56.52;4.010666666666667;35.0
+9;S4A03536_20190701_020000.wav;../Evascape_soundfiles/background_channel/wind_pw02/S4A03536_20190701_020000_norm.wav;;;;;;
