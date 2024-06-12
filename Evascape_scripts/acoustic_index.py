@@ -155,9 +155,11 @@ def plot_indices(
     # create a figure with 2 subplots
     fig, axs = plt.subplots(nrows = 1, ncols = 2, sharey='row', figsize=(width,height), gridspec_kw={'width_ratios': [8, 5]})
 
-
     # filter the dataframe to keep only the rows where the richness or the abundance is equal to 1
     df = df[(df['abundance'] == 1)|(df['richness'] == 1)]
+
+    # bonferroni correction
+    alpha = 0.05 / (len(['richness','abundance']) * len(df['channel2'].unique()))
 
     for jj, GT in enumerate(['richness','abundance']): 
         print("----- {} {} -----".format(INDICE, GT))
@@ -171,9 +173,8 @@ def plot_indices(
         # print the spearman correlation coefficient between the mean of the index and the GT
         for CH2 in subdf['channel2'].unique():
             r, p = spearmanr(subdf[subdf["channel2"]==CH2][INDICE], subdf[subdf["channel2"]==CH2][GT])
-
-            if (p < 0.05/len(subdf[subdf["channel2"]==CH2][INDICE])):
-                # print("{:>20} \t {:.2f}*".format(CH2, r))
+            # bonferroni correction
+            if (p < alpha):
                 print("{:.2f}*".format(r))
             else:
                 print("{:.2f}".format(r))
