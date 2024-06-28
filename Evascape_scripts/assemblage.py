@@ -154,7 +154,8 @@ def assemblage(
         channel2 = 'ambient_sound', 
         random_behavior = False,
         index_test = False, 
-        duration = 60, 
+        duration = 60,
+        file_margin = 2,
         samprate = 44100):
 
     """
@@ -182,6 +183,8 @@ def assemblage(
         if True, a random ambient sound is added, by default False
     duration : int, optional    
         duration of the soundscape in seconds, by default 60
+    file_margin : int, optional  
+        additional time margin for roi save in seconds, by default 2
     samprate : int, optional    
         sampling rate of the soundscape, by default 44100
 
@@ -221,7 +224,7 @@ def assemblage(
             song_vector = spl.apply_attenuation(song_vector, samprate, r0=1, r=bird_distance)
         channel1_vector = addin(base_sound = channel1_vector, 
                                 added_sound = song_vector, 
-                                time_code = song_df.min_t[song], 
+                                time_code = song_df.min_t[song] - (file_margin/2), 
                                 ramp_duration = 0.10, sr = samprate)
     
     # if isinstance(impulse_response, np.ndarray):
@@ -285,7 +288,8 @@ def database(
         database_label = 'evascape',
         all_combinations = False, 
         sample_size = 1, 
-        duration = 60, 
+        duration = 60,
+        file_margin = 2,
         samprate = 44100):
     
     global_start = time.time()
@@ -340,7 +344,8 @@ def database(
                                     channel2 = channel2,
                                     random_behavior = random_behavior,
                                     index_test = index_test,
-                                    duration = duration, 
+                                    duration = duration,
+                                    file_margin = file_margin,
                                     samprate = samprate)
 
         # remove used birds
