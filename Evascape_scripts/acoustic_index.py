@@ -14,36 +14,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import pearsonr, spearmanr
 from scipy.stats import t
+import seaborn as sns
 
-# indexes from Morrison et al 2021 
-    # ADI (richness) : 
-    # AEI (evenness) :
-    # H (heterogeneity) :
-    # Bi (amplitude) :
-        
-# chosen indices :
-    # ACI : maad.features.acoustic_complexity_index(Sxx)
-    # H
-# roi index :
-    
 #setup
 SAMPLING_RATE = 44100
 
-# load database dataframe
-#temp_dir = Path('C:/Users/ecoac-field/OneDrive/Documents/Articles-Recherches/Reconstructor/Samples/temp')
-#database_path = temp_dir / 'reconstructed_files/database_data.csv'
-# database_dir = Path("./Database_20240315_Desync")  
-# database_path = database_dir / "database_data.csv"
-# database_df = pd.read_csv(database_path, sep=';', index_col = 0)
 
-# indices_path = database_dir / 'indices.csv'
-# indices_df = pd.read_csv(indices_path, sep=';', index_col = 0)
+#### Indices computing
 
-# average_path = database_dir / 'average.csv'
-# average_df = pd.read_csv(average_path, sep=';', index_col = 0)
-
-
-#Indices computing
 def compute_all_indices(database_df, root_dir, samprate=SAMPLING_RATE):
     indices_df = database_df.copy()
     file_count = 1
@@ -96,11 +74,13 @@ def compute_all_indices(database_df, root_dir, samprate=SAMPLING_RATE):
         
     return indices_df
 
+####  Plot indices 
+
 def plot_indices(
             indices_df, 
             index, 
             width      =25, 
-            height     =10, 
+            height     =12, 
             **kwargs):
 
     default_info_dic = {'channel2' : [
@@ -140,6 +120,9 @@ def plot_indices(
                             'medium wind', 
                             'strong wind']
                                             }
+    
+    # plot box plots of the INDICE for each channel2
+    sns.set_theme(context='talk', style='whitegrid')
 
     info_dic = kwargs.pop('info_dic', default_info_dic)
 
@@ -179,32 +162,27 @@ def plot_indices(
             else:
                 print("{:.2f}".format(r))
 
-        # calculate the mean and the standard deviation of the index for each channel2 in the dataframe subdf
-        mean_df = subdf[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).apply(np.mean, axis=0)
+        # # calculate the mean and the standard deviation of the index for each channel2 in the dataframe subdf
+        # mean_df = subdf[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).apply(np.mean, axis=0)
 
-        # calculate the standard error of the mean
-        # from https://www.statology.org/standard-error-of-mean-python/
-        n = subdf[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).count()
-        # print("count : {}".format(n))
-        error_df = subdf[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).apply(np.std, axis=0, ddof=1) / np.sqrt(n)
+        # # calculate the standard error of the mean
+        # # from https://www.statology.org/standard-error-of-mean-python/
+        # n = subdf[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).count()
+        # # print("count : {}".format(n))
+        # error_df = subdf[['channel2']+[GT]+[INDICE]].groupby(['channel2',GT]).apply(np.std, axis=0, ddof=1) / np.sqrt(n)
 
-        # calculate the average mean of the index for each GT
-        average_mean_df = mean_df.reset_index(level='channel2', drop=True).groupby([GT]).apply(np.mean, axis=0)
+        # # calculate the average mean of the index for each GT
+        # average_mean_df = mean_df.reset_index(level='channel2', drop=True).groupby([GT]).apply(np.mean, axis=0)
 
-        # merge mean and margin_error dataframes
-        mean_df = pd.merge(mean_df, error_df, on = ['channel2',GT], suffixes = ('_mean', '_stdv'))
+        # # merge mean and margin_error dataframes
+        # mean_df = pd.merge(mean_df, error_df, on = ['channel2',GT], suffixes = ('_mean', '_stdv'))
 
-        # reset the index
-        mean_df = mean_df.reset_index()
-        average_mean_df = average_mean_df.reset_index()
+        # # reset the index
+        # mean_df = mean_df.reset_index()
+        # average_mean_df = average_mean_df.reset_index()
 
-        # rename the last column of the dataframe averagemean_df to INDICE
-        average_mean_df.columns = [GT,INDICE]
-
-
-        # plot box plots of the INDICE for each channel2
-        import seaborn as sns
-        sns.set_theme(context='talk', style='whitegrid')
+        # # rename the last column of the dataframe averagemean_df to INDICE
+        # average_mean_df.columns = [GT,INDICE]
         
         # Create the box plot
         sns.boxplot(
@@ -220,14 +198,6 @@ def plot_indices(
             palette = info_dic['color'],
             saturation=1,
             linewidth=0,
-            
-            # linecolor= info_dic['color'],
-            # whiskerprops=dict(info_dic['color']),
-            # boxprops=dict(facecolor=info_dic['color'],
-            #                color=info_dic['color']),
-            # capprops=dict(info_dic['color']),
-            # flierprops=dict(color=info_dic['color'], 
-            #                 markeredgecolor=info_dic['color']),
             )
 
         # # Loop through each hue category
@@ -241,252 +211,19 @@ def plot_indices(
             for line in container.whiskers:
                 line.set_color(color)  # color for whisker caps and lines
                 line.set_linewidth(1)  # thickness of whisker caps and lines
-# boxplot(data,
-#                 notch=True, patch_artist=True,
-#                 boxprops=dict(facecolor=info_dic['color'], color=info_dic['color']),
-#                 capprops=dict(info_dic['color']),
-#                 whiskerprops=dict(color=BIOME_COLOR[BIOME]),
-#                 flierprops=dict(color=BIOME_COLOR[BIOME], markeredgecolor=BIOME_COLOR[BIOME]),
-#                 medianprops=dict(color=BIOME_COLOR[BIOME]))
         
-        axs[jj].get_legend().remove()
-
-        # average_mean_df.plot(
-        #     x = GT, 
-        #     y = INDICE, 
-        #     ax = axs[jj], 
-        #     legend = 0, 
-        #     linewidth = 4,
-        #     color = 'black', 
-        #     linestyle = 'dashed', 
-        #     label = 'average')
-
-        # for key, grp in mean_df.groupby(['channel2']):
-        #     grp.plot(
-        #         x = GT, 
-        #         y = INDICE+'_mean', 
-        #         fontsize=20,
-        #         # yerr = INDICE+'_stdv', 
-        #         ax = axs[jj], 
-        #         legend = 0,
-        #         linewidth = 1, 
-        #         label = info_dic['label'][info_dic['channel2'].index(key[0])],
-        #         color = info_dic['color'][info_dic['channel2'].index(key[0])]
-        #     )
-        
-
-            
-        axs[jj].set_xlabel(GT,fontsize = 25)
+        axs[jj].get_legend().remove()            
+        axs[jj].set_xlabel(GT,fontsize = 30)
+        axs[jj].set_ylabel(axs[jj].get_ylabel(), fontsize = 30)
+        axs[jj].tick_params(labelsize=20)  # Set size for all tick labels
         axs[jj].autoscale()
             
     handles, labels = axs[0].get_legend_handles_labels()
-    fig.legend(handles, info_dic['label'], fontsize = 20, bbox_to_anchor=(1.1, 0.65))
-    fig.suptitle(index, fontsize = 40, x = 1, y=0.8)
+    fig.legend(handles, info_dic['label'], fontsize = 20, bbox_to_anchor=(1.07, 0.65))
+    fig.suptitle(index, fontsize = 100, x = 0.99, y=0.8)
     
     return fig
 
-
-    
-
-def index_plot(indices_df, index, info_df = None,  width = 25, height = 10):
-
-    if info_df is None:
-            info_dic = {'channel2' : ['ambient_sound', 'quiet', 'rain_pw01', 'rain_pw02', 'rain_pw03',
-                            'tettigonia_veridissima', 'wind_pw01', 'wind_pw02', 'wind_pw03'],
-                'color': ['mediumorchid', 'grey', 'deepskyblue', 'royalblue', 'darkblue', 'green', 'lightcoral', 'red', 'brown'],
-                'label' : ['ambient sound', 'quiet', 'light rain', 'medium rain', 'strong rain',
-                                    'tettigonia veridissima', 'light wind', 'medium wind', 'strong wind']}
-            info_df = pd.DataFrame(info_dic).set_index('channel2')
-
-    #plot
-    ch2_list = indices_df.channel2.unique()
-
-    fig, axs = plt.subplots(nrows = 1, ncols = 2, sharey='row', figsize=(width,height))
-    index_df =  indices_df.loc[:,['richness','abundance','channel2'] + [index]]
-    
-    supx_list = ['richness','abundance']
-    ch2_list = indices_df.channel2.unique()
-    corrcoeff_df = pd.DataFrame(index = ch2_list, columns = supx_list)
-    pvalue_df = pd.DataFrame(index = ch2_list, columns = supx_list)
-    for j, supx in enumerate(supx_list): 
-        xvar_list = indices_df[supx].unique()
-        df_len = len(xvar_list) * len(ch2_list)
-        condition_list = [supx, 'channel2']
-        supx_df = pd.DataFrame(index = list(range(df_len)),columns = condition_list)
-        i=0
-        for x_var in xvar_list :
-            for channel2 in ch2_list:
-                sub_df = index_df.loc[(index_df.richness == x_var) & 
-                                      (index_df.channel2 == channel2)]
-                mean = np.mean(sub_df[index])
-                error = np.std(sub_df[index],ddof=1)/np.sqrt(np.size(sub_df[index]))
-                supx_df.loc[i,condition_list] = [x_var, channel2]
-                supx_df.loc[i, index + '_mean'] = mean
-                supx_df.loc[i, index + '_err'] = error
-                i += 1
-        mean_name = supx_df.columns[-2]
-        err_name = supx_df.columns[-1]
-        mean_df = supx_df.drop(err_name, axis = 1)
-        mean_df = mean_df.pivot(index = supx, columns = 'channel2', values = mean_name)
-        averagemean_df = np.mean(mean_df, axis = 1)
-        mean_columns = list(mean_df.columns)
-        err_df = supx_df.drop(mean_name, axis = 1)
-        err_df = err_df.pivot(index = supx, columns = 'channel2', values = err_name)
-        err_df['mean'] = 0.0
-        
-        mean_df['index'] = list(range(len(mean_df)))
-        mean_df[supx] = mean_df.index
-        mean_df = mean_df.set_index('index')
-
-        averagemean_df.plot(ax = axs[j], legend = 0, linewidth = 4,
-                            color = 'black', linestyle = 'dashed', label = 'average')
-        mean_df.plot(x = supx, y = mean_columns, fontsize=20,
-                     yerr = err_df, ax = axs[j], legend = 0,
-                     linewidth = 2.5, color = info_df.color)
-        axs[j].set_xlabel(supx,fontsize = 25)
-        axs[j].autoscale()
-        
-        #correlation coefficient and p-value
-        for channel2 in ch2_list:
-            coeff, pvalue = pearsonr(xvar_list, mean_df[channel2])
-            corrcoeff_df.loc[channel2, supx] = coeff
-            pvalue_df.loc[channel2, supx] = pvalue
-            if (coeff > 0 and coeff < 0.7) or (coeff < 0 and coeff < -0.7):
-                print(f'{index}, {supx} : {channel2} correlation is weak')
-            if pvalue > 0.05:
-                print(f'{index}, {supx} : {channel2} p-value is not significant')
-    
-    corr_col = ['rich_coeff', 'rich_pvalue', 'ab_coeff', 'ab_pvalue']
-    correlation_df = pd.DataFrame(index = ch2_list, columns = corr_col)
-    correlation_df[['rich_coeff','ab_coeff']] = corrcoeff_df
-    correlation_df[['rich_pvalue','ab_pvalue']] = pvalue_df
-    
-    handles, labels = axs[0].get_legend_handles_labels()
-    labels = ['average'] + info_df.label.tolist()
-    fig.legend(handles, labels, fontsize = 20, bbox_to_anchor=(1.1, 0.65))
-    fig.suptitle(index, fontsize = 40, x = 1, y=0.8)
-    
-    return fig, correlation_df
-
-
-
-def average_all_indices(indices_df, index_list):
-    richness_list = indices_df.richness.unique()
-    abundance_list = indices_df.abundance.unique()
-    ch2_list = indices_df.channel2.unique()
-    df_len = len(richness_list) * len(abundance_list) * len(ch2_list)
-    condition_list = ['richness','abundance','channel2']
-    average_df = pd.DataFrame(index = list(range(df_len)),columns = condition_list)
-    for index in index_list:
-        index_df = indices_df.loc[:,condition_list + [index]]
-        i=0
-        for richness in richness_list:
-            for abundance in abundance_list: 
-                for channel2 in ch2_list:
-                    sub_df = index_df.loc[(index_df.richness == richness) & 
-                                          (index_df.abundance == abundance) &
-                                          (index_df.channel2 == channel2)]
-                    mean = np.mean(sub_df[index])
-                    error = np.std(sub_df[index],ddof=1)/np.sqrt(np.size(sub_df[index]))
-                    average_df.loc[i,condition_list] = [richness, abundance, channel2]
-                    average_df.loc[i, index + '_mean'] = mean
-                    average_df.loc[i, index + '_err'] = error
-                    i += 1
-    return(average_df)
-
-# index_list = ['nROI','aROI','ACI','H', 'NDSI', 'ADI', 'BI']
-# average_df = average_all_indices(indices_df, index_list)
-# average_path = database_dir / 'average.csv'
-# average_df.to_csv(average_path, sep=';')        
-
-
-#### Plot : Index score against variable 1 (richness or abundance), variable 2 is line (abundance or richness)
-#### Subplot : Index nature against channel2 
-def multiplot(average_df,
-              x_var = 'richness', line_var = 'abundance', supx_var = 'channel2',
-              index_list = ['nROI','aROI','ACI','H', 'NDSI', 'ADI', 'BI']):
-
-    average_df['total_abundance'] = average_df.richness * average_df.abundance
-    supx_list = list(average_df[supx_var].unique())
-    if x_var == 'total_abundance':
-        condition_list = [x_var, supx_var]
-    else :
-        condition_list = [x_var, line_var, supx_var]
-    #comb_list = pd.DataFrame(product(index_list, supx_list), columns = ['index',supx_var])
-    
-    fig, axs = plt.subplots(nrows = len(index_list), ncols = len(supx_list), #sharex = True, sharey = True,
-                             sharey='row', figsize=(30,25))
-    #min_x = min(average_df[x_var])
-    #max_x = max(average_df[x_var])
-    for i, index in enumerate(index_list):
-        index_column = 2 + (i+1)*2 - 1
-        index_df = pd.concat([average_df.loc[:,condition_list], 
-                              average_df.iloc[:,[index_column, index_column + 1],]
-                              ], axis = 1)
-        mean_name = index_df.columns[-2]
-        err_name = index_df.columns[-1]
-        
-        for j, supx in enumerate(supx_list):
-            supx_df = index_df.loc[index_df[supx_var] == supx].drop([supx_var], axis = 1)
-            
-            if x_var == 'total_abundance':
-                mean_df = pd.DataFrame(columns = [x_var, mean_name])
-                err_df = pd.DataFrame(columns = [x_var, err_name])
-                index = 0
-                for abundance in supx_df.total_abundance.unique():
-                    toaverage_df = supx_df.loc[supx_df.total_abundance == abundance]
-                    mean = np.mean(toaverage_df[mean_name])
-                    mean_df.loc[index] = [abundance, mean]
-                    std_mean = np.sqrt(sum(std**2 for std in toaverage_df[err_name])/len(toaverage_df))
-                    err_df.loc[index] = [abundance, std_mean]
-                    index += 1
-                mean_df = mean_df.sort_values(by = x_var)
-                err_df = err_df.sort_values(by = x_var).set_index(x_var)
-                mean_df.plot(x = x_var, y = mean_name, xticks = list(mean_df[x_var]),
-                             yerr = err_df, ax = axs[i,j], legend = 0) #, capsize=5
-
-            else:    
-                mean_df = supx_df.drop(err_name, axis = 1)
-                mean_df = mean_df.pivot(index = x_var, columns = line_var, values = mean_name)
-                averagemean_df = np.mean(mean_df, axis = 1)
-                mean_columns = list(mean_df.columns)
-                err_df = supx_df.drop(mean_name, axis = 1)
-                err_df = err_df.pivot(index = x_var, columns = line_var, values = err_name)
-                err_df['mean'] = 0.0
-                
-                mean_df['index'] = list(range(len(mean_df)))
-                mean_df[x_var] = mean_df.index
-                mean_df = mean_df.set_index('index')
-
-                averagemean_df.plot(ax = axs[i,j], legend = 0, 
-                                    color = 'black', linestyle = 'dashed', zorder = 3.5)
-                mean_df.plot(x = x_var, y = mean_columns, xticks = list(mean_df[x_var]),
-                             yerr = err_df, ax = axs[i,j], legend = 0, zorder = 4.5) #, capsize=5
-    
-    #axis and title
-    for ax, col in zip(axs[0], supx_list):
-        ax.set_title(col, size=20)
-    for ax, row in zip(axs[:,0], index_list):
-        ax.set_ylabel(row, size=20) #, rotation=0
-    fig.supxlabel, fig.supylabel = supx_var, 'index'
-    fig.suptitle = f'Index Scores against {x_var}'
-    handles, labels = axs[0,0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc='upper right')
-    fig.tight_layout()
-    
-    return fig
-
-# multiplot(average_df, 
-#           x_var = 'abundance', line_var = 'richness', supx_var = 'channel2',
-#           index_list = ['nROI','aROI','ACI','H', 'NDSI', 'ADI', 'BI'])
-
-# multiplot(average_df, 
-#           x_var = 'richness', line_var = 'abundance', supx_var = 'channel2',
-#           index_list = ['nROI','aROI','ACI','H', 'NDSI', 'ADI', 'BI'])
-
-# multiplot(average_df, 
-#           x_var = 'total_abundance', line_var = 'richness', supx_var = 'channel2',
-#           index_list = ['nROI','aROI','ACI','H', 'NDSI', 'ADI', 'BI'])
 
 
 #### New index function to compute ROI indices
