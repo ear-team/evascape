@@ -36,7 +36,7 @@ def compute_all_indices(database_df, root_dir, samprate=SAMPLING_RATE):
         
         #ROI indices
         nROI, aROI = region_of_interest_index2(Sxx_power, tn, fn,   
-                                        seed_level=12, 
+                                        seed_level=13, 
                                         low_level=6, 
                                         fusion_rois=(0.05, 100), # (seconds, hertz) ,
                                         remove_rois_fmin_lim = (50,20000),
