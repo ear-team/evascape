@@ -1,0 +1,10 @@
+;song_filename;song_fullfilename;bird_filename;categories;min_t;max_t;song_len;distance
+0;MNHN-SO-2016-9346_full_0s_05_norm.wav;../Evascape_soundfiles/bird_channel/perate/MNHN-SO-2016-9346_full/MNHN-SO-2016-9346_full_0s_05_norm.wav;MNHN-SO-2016-9346_full.wav;perate;0.22;2.44;2.218666666666664;39.0
+1;MNHN-SO-2016-9346_full_0s_00_norm.wav;../Evascape_soundfiles/bird_channel/perate/MNHN-SO-2016-9346_full/MNHN-SO-2016-9346_full_0s_00_norm.wav;MNHN-SO-2016-9346_full.wav;perate;7.84;9.93;2.090666666666664;39.0
+2;MNHN-SO-2016-9346_full_0s_01_norm.wav;../Evascape_soundfiles/bird_channel/perate/MNHN-SO-2016-9346_full/MNHN-SO-2016-9346_full_0s_01_norm.wav;MNHN-SO-2016-9346_full.wav;perate;13.09;15.17;2.0799999999999983;39.0
+3;MNHN-SO-2016-9346_full_0s_07_norm.wav;../Evascape_soundfiles/bird_channel/perate/MNHN-SO-2016-9346_full/MNHN-SO-2016-9346_full_0s_07_norm.wav;MNHN-SO-2016-9346_full.wav;perate;19.15;20.38;1.226666666666667;39.0
+4;MNHN-SO-2016-9346_full_0s_02_norm.wav;../Evascape_soundfiles/bird_channel/perate/MNHN-SO-2016-9346_full/MNHN-SO-2016-9346_full_0s_02_norm.wav;MNHN-SO-2016-9346_full.wav;perate;25.37;27.24;1.8666666666666671;39.0
+5;MNHN-SO-2016-9346_full_0s_03_norm.wav;../Evascape_soundfiles/bird_channel/perate/MNHN-SO-2016-9346_full/MNHN-SO-2016-9346_full_0s_03_norm.wav;MNHN-SO-2016-9346_full.wav;perate;31.08;33.38;2.303999999999995;39.0
+6;MNHN-SO-2016-9346_full_0s_06_norm.wav;../Evascape_soundfiles/bird_channel/perate/MNHN-SO-2016-9346_full/MNHN-SO-2016-9346_full_0s_06_norm.wav;MNHN-SO-2016-9346_full.wav;perate;37.22;38.54;1.3226666666666669;39.0
+7;MNHN-SO-2016-9346_full_0s_04_norm.wav;../Evascape_soundfiles/bird_channel/perate/MNHN-SO-2016-9346_full/MNHN-SO-2016-9346_full_0s_04_norm.wav;MNHN-SO-2016-9346_full.wav;perate;41.7;43.73;2.026666666666668;39.0
+8;S4A03544_20190729_013000.wav;../Evascape_soundfiles/background_channel/rain_pw01/S4A03544_20190729_013000_norm.wav;;;;;;

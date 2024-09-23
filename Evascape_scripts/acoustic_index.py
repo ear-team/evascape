@@ -12,8 +12,7 @@ from toolbox import waveread
 from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import pearsonr, spearmanr
-from scipy.stats import t
+from scipy.stats import spearmanr
 import seaborn as sns
 
 #setup

@@ -1,0 +1,11 @@
+;song_filename;song_fullfilename;bird_filename;categories;min_t;max_t;song_len;distance
+0;MNHN-SO-2016-11213_extr_0s_01_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11213_extr/MNHN-SO-2016-11213_extr_0s_01_norm.wav;MNHN-SO-2016-11213_extr.wav;regreg;1.72;4.93;3.2106666666666683;30.0
+1;MNHN-SO-2016-11213_extr_0s_04_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11213_extr/MNHN-SO-2016-11213_extr_0s_04_norm.wav;MNHN-SO-2016-11213_extr.wav;regreg;9.02;11.49;2.474666666666668;30.0
+2;MNHN-SO-2016-11213_extr_0s_00_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11213_extr/MNHN-SO-2016-11213_extr_0s_00_norm.wav;MNHN-SO-2016-11213_extr.wav;regreg;15.2;17.8;2.602666666666668;30.0
+3;MNHN-SO-2016-11213_extr_0s_03_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11213_extr/MNHN-SO-2016-11213_extr_0s_03_norm.wav;MNHN-SO-2016-11213_extr.wav;regreg;19.37;22.1;2.7306666666666644;30.0
+4;MNHN-SO-2016-11213_extr_0s_08_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11213_extr/MNHN-SO-2016-11213_extr_0s_08_norm.wav;MNHN-SO-2016-11213_extr.wav;regreg;27.18;28.82;1.6426666666666705;30.0
+5;MNHN-SO-2016-11213_extr_0s_07_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11213_extr/MNHN-SO-2016-11213_extr_0s_07_norm.wav;MNHN-SO-2016-11213_extr.wav;regreg;33.9;36.37;2.474666666666666;30.0
+6;MNHN-SO-2016-11213_extr_0s_06_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11213_extr/MNHN-SO-2016-11213_extr_0s_06_norm.wav;MNHN-SO-2016-11213_extr.wav;regreg;41.42;43.99;2.570666666666667;30.0
+7;MNHN-SO-2016-11213_extr_0s_05_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11213_extr/MNHN-SO-2016-11213_extr_0s_05_norm.wav;MNHN-SO-2016-11213_extr.wav;regreg;46.72;49.65;2.93333333333333;30.0
+8;MNHN-SO-2016-11213_extr_0s_02_norm.wav;../Evascape_soundfiles/bird_channel/regreg/MNHN-SO-2016-11213_extr/MNHN-SO-2016-11213_extr_0s_02_norm.wav;MNHN-SO-2016-11213_extr.wav;regreg;54.73;56.94;2.208000000000005;30.0
+9;S4A03536_20190708_001500.wav;../Evascape_soundfiles/background_channel/aircraft_pw02/S4A03536_20190708_001500_norm.wav;;;;;;

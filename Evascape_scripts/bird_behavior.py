@@ -8,7 +8,6 @@ Created on Fri Mar  3 11:16:02 2023
 import numpy as np
 import pandas as pd
 import random
-import math
 import maad as maad
 import matplotlib.pyplot as plt
 
